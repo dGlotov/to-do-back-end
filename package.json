@@ -1,0 +1,27 @@
+{
+  "name": "to-do-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "api-routes": "^0.2.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "y": "^0.3.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dGlotov/to-do-back-end.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dGlotov/to-do-back-end/issues"
+  },
+  "homepage": "https://github.com/dGlotov/to-do-back-end#readme"
+}
