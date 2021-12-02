@@ -1,11 +1,12 @@
-const express = require('express');
-const cors = require('cors');
+import express, { json, urlencoded } from 'express';
+import cors from 'cors';
+import apiRoutes from './src/modules/routes/index.js';
 const app = express();
-const apiRoutes = require('./src/modules/routes/index.js');
 
 
 app.use(cors());
-app.use(express.json());
+app.use(json());
+app.use(urlencoded({ extended: true }))
 app.use('/', apiRoutes);
 
 app.listen(8000, () => {
