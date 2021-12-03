@@ -8,8 +8,7 @@ export default (req, res) => {
     const taskIndex = db.tasks.findIndex((item) => item.uuid === req.params.id);
 
     if (taskIndex + 1) {
-      const newArr = db.tasks.filter((task) => task.uuid !== req.params.id);
-      db.tasks = newArr;
+      db.tasks = db.tasks.filter((task) => task.uuid !== req.params.id);
 
       fs.writeFileSync("db.json", JSON.stringify(db));
 
