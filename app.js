@@ -1,6 +1,6 @@
 import express, { json, urlencoded } from 'express';
 import cors from 'cors';
-import apiRoutes from './src/modules/routes/index.js';
+import apiRoutes from './src/modules/routes/task.js';
 import dotenv from "dotenv"
 const app = express();
 
