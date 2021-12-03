@@ -15,8 +15,7 @@ export default (req, res) => {
     const page = parseInt(req.query.page) - 1 || 0;
     const pageSize = parseInt(req.query.pageSize) || 5;
 
-    filterBy !== "all" &&
-      (arrTasks = arrTasks.filter((task) => task.done === filterBy));
+    filterBy !== "all" && (arrTasks = arrTasks.filter((task) => task.done === filterBy));
     sortBy === "asc"
       ? arrTasks.sort((a, b) => a.created_at > b.created_at)
       : arrTasks.sort((a, b) => a.created_at < b.created_at);
@@ -28,6 +27,6 @@ export default (req, res) => {
 
     res.json({ data: { arrTasks, countTasks } });
   } catch (err) {
-    err.message ? res.json({ message: "Bad request" }) : res.json(err);
+    err.message ? res.json(err) : res.json({ message: "Bad request" });
   }
 };

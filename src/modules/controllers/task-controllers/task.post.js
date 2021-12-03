@@ -10,8 +10,7 @@ export default (req, res) => {
 
     if (name.lenght < 2) throw { message: "Need more symbols" };
 
-    if (tasks.find((item) => item.name === name))
-      throw { message: "This name already exists" };
+    if (tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 
     const task = {
       uuid: randomUUID(),
@@ -25,6 +24,6 @@ export default (req, res) => {
     fs.writeFileSync("tasks.json", JSON.stringify(tasks));
     res.json(task);
   } catch (err) {
-    err.message ? res.json({ message: "Bad request" }) : res.json(err);
+    err.message ? res.json(err) : res.json({ message: "Bad request" });
   }
 };

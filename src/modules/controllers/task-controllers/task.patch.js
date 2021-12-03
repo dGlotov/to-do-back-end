@@ -10,8 +10,7 @@ export default (req, res) => {
 
     if (name && name.lenght < 2) throw { message: "Need more symbols" };
 
-    if (tasks.find((item) => item.name === name))
-      throw { message: "This name already exists" };
+    if (tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 
     if (taskIndex) {
       tasks[taskIndex].name = name || tasks[taskIndex].name;
@@ -20,6 +19,6 @@ export default (req, res) => {
       res.json(tasks[taskIndex]);
     } else throw { message: "Id not found" };
   } catch (err) {
-    err.message ? res.json({ message: "Bad request" }) : res.json(err);
+    err.message ? res.json(err) : res.json({ message: "Bad request" });
   }
 };
