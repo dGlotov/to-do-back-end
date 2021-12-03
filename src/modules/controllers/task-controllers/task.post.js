@@ -8,7 +8,7 @@ export default (req, res) => {
 
     const name = req.body.name;
 
-    if (name.lenght < 2) throw { message: "Need more symbols" };
+    if (name.length < 2) throw { message: "Need more symbols" };
 
     if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 

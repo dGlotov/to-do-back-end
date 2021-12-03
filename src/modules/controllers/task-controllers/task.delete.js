@@ -12,7 +12,7 @@ export default (req, res) => {
 
       fs.writeFileSync("db.json", JSON.stringify(db));
 
-      res.json({ data: "Sucsses delete" });
+      res.json("Sucsses delete");
     } else {
       throw { message: "Id not found" };
     }

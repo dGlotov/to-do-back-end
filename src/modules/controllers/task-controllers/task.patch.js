@@ -8,7 +8,7 @@ export default (req, res) => {
     const { name, done } = req.body;
     const taskIndex = db.tasks.findIndex((item) => item.uuid === req.params.id);
 
-    if (name && name.lenght < 2) throw { message: "Need more symbols" };
+    if (name && name.length < 2) throw { message: "Need more symbols" };
 
     if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 

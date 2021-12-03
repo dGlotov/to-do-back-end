@@ -19,11 +19,11 @@ export default (req, res) => {
 
     sortBy === "asc"
       ? (arrTasks = arrTasks.sort((a, b) => {
-          if (a.updatedAt > b.updatedAt) return 1;
+          if (a.created_at > b.created_at) return 1;
           else return -1;
         }))
       : (arrTasks = arrTasks.sort((a, b) => {
-          if (a.updatedAt > b.updatedAt) return -1;
+          if (a.created_at > b.created_at) return -1;
           else return 1;
         }));
 
@@ -33,7 +33,7 @@ export default (req, res) => {
       (item, index) => index >= page * pageSize && index < (page + 1) * pageSize
     );
 
-    res.json({ data: { arrTasks, countTasks } });
+    res.json({ arrTasks, countTasks });
   } catch (err) {
     err.message ? res.json(err) : res.json({ message: "Bad request" });
   }
