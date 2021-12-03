@@ -16,9 +16,17 @@ export default (req, res) => {
     const pageSize = parseInt(req.query.pageSize) || 5;
 
     filterBy !== "all" && (arrTasks = arrTasks.filter((task) => task.done === filterBy));
+
     sortBy === "asc"
-      ? arrTasks.sort((a, b) => a.created_at > b.created_at)
-      : arrTasks.sort((a, b) => a.created_at < b.created_at);
+      ? (arrTasks = arrTasks.sort((a, b) => {
+          if (a.updatedAt > b.updatedAt) return 1;
+          else return -1;
+        }))
+      : (arrTasks = arrTasks.sort((a, b) => {
+          if (a.updatedAt > b.updatedAt) return -1;
+          else return 1;
+        }));
+
     const countTasks = arrTasks.length;
 
     arrTasks = arrTasks.filter(
