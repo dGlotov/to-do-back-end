@@ -1,22 +1,22 @@
 import fs from 'fs';
-import db from '../../../../tasks.json' 
+import tasks from '../../../../tasks.json' 
 
 const deleteTask = (req, res) => {
   try {
-    if (!req.params.id) throw {message: "Bad request"}
+    if (!req.params.id) throw {message: "Id not passed"}
 
-    db.forEach(item => {
+    tasks.forEach(item => {
       if (item.uuid !== req.params.id) throw { message: "Bad id"}
     })
   
-    const newArr = db.filter(element => element.uuid != req.params.id);
+    const newArr = tasks.filter(element => element.uuid != req.params.id);
   
     fs.writeFileSync("tasks.json", JSON.stringify(newArr));
   }
   catch (err) {
-    if (!err.message) {
-      res.json({message: "Bad request"})
-    } else res.send(err);
+    err.message
+      ? res.json({message: "Bad request"})
+      : res.json(err);
   }
 }
 

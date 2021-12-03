@@ -1,16 +1,16 @@
 import fs from 'fs';
-import db from '../../../../tasks.json';
+import tasks from '../../../../tasks.json';
 import { randomUUID } from "crypto";
 
 const createTask = (req, res) => {
   try {
-    if (!req.body.name) throw { message: "Bad request"};
+    if (!req.body.name) throw { message: "Name not passed"};
 
     const name =  req.body.name;
     
     if (name.lenght < 2) throw { message: "Need more symbols"};
     
-    db.forEach(item => {
+    tasks.forEach(item => {
       if (item.name === name) throw { message: "This name already exists"}
     })
     
@@ -21,16 +21,16 @@ const createTask = (req, res) => {
       created_at: new Date(),
     };
   
-    db.push(task);
+    tasks.push(task);
   
-    fs.writeFileSync("tasks.json", JSON.stringify(db));
-    res.send(task);
+    fs.writeFileSync("tasks.json", JSON.stringify(tasks));
+    res.json(task);
 
   }
   catch(err) {
-    if (!err.message) {
-      res.json({message: "Bad request"})
-    } else res.send(err);
+    err.message
+      ? res.json({message: "Bad request"})
+      : res.json(err);
   }
 }
 

@@ -1,5 +1,5 @@
 import fs from 'fs';
-import db from '../../../../tasks.json';
+import tasks from '../../../../tasks.json';
 
 const changeTask = (req, res) => {
   try {
@@ -9,23 +9,23 @@ const changeTask = (req, res) => {
     
     if (name.lenght < 2) throw { message: "Need more symbols"};
     
-    db.forEach(item => {
+    tasks.forEach(item => {
       if (item.name === name || item.uuid !== req.params.id) throw { message: "This name already exists or bad id"}
     })
 
-    db.forEach(item => {
+    tasks.forEach(item => {
       if (item.uuid === req.params.id) {
         item.name = name || item.name;
         item.done = done || item.done;
-        res.send(item);
-        return fs.writeFileSync("tasks.json", JSON.stringify(db));
+        res.json(item);
+        return fs.writeFileSync("tasks.json", JSON.stringify(tasks));
       } 
     })
   }
   catch (err) {
-    if (!err.message) {
-      res.json({message: "Bad request"})
-    } else res.send(err);
+    err.message
+    ? res.json({message: "Bad request"})
+    : res.json(err);
   }
 }
 
