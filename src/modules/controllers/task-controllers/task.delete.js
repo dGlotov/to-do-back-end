@@ -20,3 +20,4 @@ export default (req, res) => {
     err.message ? res.json(err) : res.json({ message: "Bad request" });
   }
 };
+ 
