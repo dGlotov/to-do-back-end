@@ -1,5 +1,5 @@
 import fs from "fs";
-import tasks from "../../../../tasks.json";
+import db from "../../../../db.json";
 import { randomUUID } from "crypto";
 
 export default (req, res) => {
@@ -10,7 +10,7 @@ export default (req, res) => {
 
     if (name.lenght < 2) throw { message: "Need more symbols" };
 
-    if (tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
+    if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 
     const task = {
       uuid: randomUUID(),
@@ -19,9 +19,9 @@ export default (req, res) => {
       created_at: new Date(),
     };
 
-    tasks.push(task);
+    db.tasks.push(task);
 
-    fs.writeFileSync("tasks.json", JSON.stringify(tasks));
+    fs.writeFileSync("db.json", JSON.stringify(db));
     res.json(task);
   } catch (err) {
     err.message ? res.json(err) : res.json({ message: "Bad request" });

@@ -1,8 +1,8 @@
-import tasks from "../../../../tasks.json";
+import db from "../../../../db.json";
 
 export default (req, res) => {
   try {
-    let arrTasks = [...tasks];
+    let arrTasks = [...db.tasks];
     const filterBy = req.query.filterBy
       ? req.query.filterBy === "done"
         ? true

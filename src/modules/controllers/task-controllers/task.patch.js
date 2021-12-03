@@ -1,22 +1,23 @@
 import fs from "fs";
-import tasks from "../../../../tasks.json";
+import db from "../../../../db.json";
 
 export default (req, res) => {
   try {
     if (!req.body || !req.params.id) throw { message: "Bad request" };
 
     const { name, done } = req.body;
-    const taskIndex = tasks.findIndex((item) => item.uuid === req.params.id);
+    const taskIndex = db.tasks.findIndex((item) => item.uuid === req.params.id);
 
     if (name && name.lenght < 2) throw { message: "Need more symbols" };
 
-    if (tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
+    if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
 
-    if (taskIndex) {
-      tasks[taskIndex].name = name || tasks[taskIndex].name;
-      tasks[taskIndex].done = done || tasks[taskIndex].done;
-      fs.writeFileSync("tasks.json", JSON.stringify(tasks));
-      res.json(tasks[taskIndex]);
+    if (taskIndex + 1) {
+      const task = db.tasks[taskIndex];
+      task.name = name || task.name;
+      task.done = done || task.done;
+      fs.writeFileSync("db.json", JSON.stringify(db));
+      res.json(task);
     } else throw { message: "Id not found" };
   } catch (err) {
     err.message ? res.json(err) : res.json({ message: "Bad request" });
