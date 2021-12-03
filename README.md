@@ -1,14 +1,16 @@
 # to-do-back-end
+
 This API for to-do application
 
 > To run this application, you need to:
 
-use command `npm i` 
+use command `npm i`
 
-This application uses the nodemon package, to run you need create script with:
+Then you need to create an .env file and write `PORT = YOUR_PORT_NUMBER` or in app.js `const PORT = any port` in `app.js`
 
-> `npm --experimental-json-modules app.js` command
+launch the application `npm start`
 
-Then you need to create an .env file and write `PORT = YOUR_PORT_NUMBER` or in app.js `const PORT = any port`
+`npm start` this script run comand `nodemon --experimental-json-modules index.js`
+If you wanna deploy this, you need create script with:
 
-launch the application `npm start` 
+> `node --experimental-json-modules index.js` command

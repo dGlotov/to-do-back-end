@@ -4,15 +4,15 @@ import tasks from "../../../../tasks.json";
 export default (req, res) => {
   try {
     if (!req.params.id) throw { message: "Id not passed" };
-    console.log(req.params.id);
+
     const taskIndex = tasks.findIndex((item) => item.uuid === req.params.id);
-    console.log(taskIndex);
+
     if (taskIndex + 1) {
       fs.writeFileSync(
         "tasks.json",
         JSON.stringify(tasks.filter((task) => task.uuid !== req.params.id))
       );
-      res.json();
+      res.json({ data: "Sucsses delete" });
     } else {
       throw { message: "Id not found" };
     }
