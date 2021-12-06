@@ -1,22 +1,13 @@
-import fs from "fs";
-import db from "../../../../db.json";
+const Task = require("../../../../models/task.js");
 
-export default (req, res) => {
+module.exports = async (req, res) => {
   try {
-    if (!req.params.id) throw { message: "Id not passed" };
-
-    const taskIndex = db.tasks.findIndex((item) => item.uuid === req.params.id);
-
-    if (taskIndex + 1) {
-      db.tasks = db.tasks.filter((task) => task.uuid !== req.params.id);
-
-      fs.writeFileSync("db.json", JSON.stringify(db));
-
-      res.json("Sucsses delete");
-    } else {
-      throw { message: "Id not found" };
-    }
+    const taskForDelete = await Task.findByPk(req.params.id);
+    if (!taskForDelete) throw "Id not found";
+    await taskForDelete.destroy();
+    res.send("Succes delete", 200);
   } catch (err) {
-    err.message ? res.json(err) : res.json({ message: "Bad request" });
+    // err.errors.length && res.status(400).json({ message: err.errors[0].message });
+    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
   }
 };

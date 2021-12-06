@@ -1,14 +1,14 @@
-import { Router } from 'express';
+const express = require("express");
+const router = express.Router();
 
-import createTask from '../controllers/task-controllers/task.post.js';
-import allTask from '../controllers/task-controllers/task.get.js';
-import changeTask from '../controllers/task-controllers/task.patch.js';
-import deleteTask from '../controllers/task-controllers/task.delete.js';
+const createTask = require("../controllers/task-controllers/task.post.js");
+const allTasks = require("../controllers/task-controllers/task.get.js");
+const changeTask = require("../controllers/task-controllers/task.patch.js");
+const deleteTask = require("../controllers/task-controllers/task.delete.js");
 
-const router = Router();
-router.post('/task', createTask);
-router.get('/tasks', allTask);
-router.patch('/task/:id', changeTask);
-router.delete('/task/:id', deleteTask);
+router.post("/task", createTask);
+router.get("/tasks", allTasks);
+router.patch("/task/:id", changeTask);
+router.delete("/task/:id", deleteTask);
 
-export default router;
+module.exports = router;

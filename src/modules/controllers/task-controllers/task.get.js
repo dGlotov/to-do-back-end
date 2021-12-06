@@ -1,8 +1,7 @@
-import db from "../../../../db.json";
+const Task = require("../../../../models/task.js");
 
-export default (req, res) => {
+module.exports = async (req, res) => {
   try {
-    let arrTasks = [...db.tasks];
     const filterBy = req.query.filterBy
       ? req.query.filterBy === "done"
         ? true
@@ -15,26 +14,29 @@ export default (req, res) => {
     const page = parseInt(req.query.page) - 1 || 0;
     const pageSize = parseInt(req.query.pageSize) || 5;
 
-    filterBy !== "all" && (arrTasks = arrTasks.filter((task) => task.done === filterBy));
+    let itemsOnPage = [];
 
-    sortBy === "asc"
-      ? (arrTasks = arrTasks.sort((a, b) => {
-          if (a.created_at > b.created_at) return 1;
-          else return -1;
-        }))
-      : (arrTasks = arrTasks.sort((a, b) => {
-          if (a.created_at > b.created_at) return -1;
-          else return 1;
-        }));
+    if (filterBy === "all") {
+      itemsOnPage = await Task.findAndCountAll({
+        limit: pageSize,
+        offset: page * pageSize,
+        order: [["createdAt", sortBy]],
+      });
+    }
+    if (filterBy !== "all") {
+      itemsOnPage = await Task.findAndCountAll({
+        limit: pageSize,
+        offset: page * pageSize,
+        where: {
+          done: filterBy,
+        },
+        order: [["createdAt", sortBy]],
+      });
+    }
 
-    const countTasks = arrTasks.length;
-
-    arrTasks = arrTasks.filter(
-      (item, index) => index >= page * pageSize && index < (page + 1) * pageSize
-    );
-
-    res.json({ arrTasks, countTasks });
+    res.send({ arrTasks: itemsOnPage.rows, countTasks: itemsOnPage.count }, 200);
   } catch (err) {
-    err.message ? res.json(err) : res.json({ message: "Bad request" });
+    // err.errors.length && res.status(400).json({ message: err.errors[0].message });
+    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
   }
 };

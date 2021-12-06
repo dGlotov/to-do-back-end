@@ -1,29 +1,14 @@
-import fs from "fs";
-import db from "../../../../db.json";
-import { randomUUID } from "crypto";
+const Task = require("../../../../models/task.js");
 
-export default (req, res) => {
+module.exports = async (req, res) => {
   try {
-    if (!req.body.name) throw { message: "Name not passed" };
+    if (!req.body.name) throw "Name not found";
 
-    const name = req.body.name;
+    const task = await Task.create(req.body);
 
-    if (name.length < 2) throw { message: "Need more symbols" };
-
-    if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
-
-    const task = {
-      uuid: randomUUID(),
-      name,
-      done: false,
-      created_at: new Date(),
-    };
-
-    db.tasks.push(task);
-
-    fs.writeFileSync("db.json", JSON.stringify(db));
-    res.json(task);
+    res.send(task);
   } catch (err) {
-    err.message ? res.json(err) : res.json({ message: "Bad request" });
+    // err.errors.length && res.status(400).json({ message: err.errors[0].message });
+    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
   }
 };

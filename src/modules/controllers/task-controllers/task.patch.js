@@ -1,25 +1,24 @@
-import fs from "fs";
-import db from "../../../../db.json";
+const Task = require("../../../../models/task.js");
 
-export default (req, res) => {
+module.exports = async (req, res) => {
   try {
-    if (!req.body || !req.params.id) throw { message: "Bad request" };
+    const name = req.body.name;
+    const done = req.body.done;
 
-    const { name, done } = req.body;
-    const taskIndex = db.tasks.findIndex((item) => item.uuid === req.params.id);
+    const task = await Task.findByPk(req.params.id);
+    if (!task) throw "Id not found";
 
-    if (name && name.length < 2) throw { message: "Need more symbols" };
+    if (name) {
+      await task.update({ name });
+    }
 
-    if (db.tasks.find((item) => item.name === name)) throw { message: "This name already exists" };
+    if (typeof done === "boolean") {
+      await task.update({ done });
+    } else throw "Bad request body";
 
-    if (taskIndex + 1) {
-      const task = db.tasks[taskIndex];
-      task.name = name || task.name;
-      task.done = done || task.done;
-      fs.writeFileSync("db.json", JSON.stringify(db));
-      res.json(task);
-    } else throw { message: "Id not found" };
+    res.send({ task }, 200);
   } catch (err) {
-    err.message ? res.json(err) : res.json({ message: "Bad request" });
+    // err.errors && res.status(400).json({ message: err.errors[0].message });
+    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
   }
 };
