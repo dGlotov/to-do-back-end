@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
 
     await taskForDelete.destroy();
 
-    res.send("Succes delete", 200);
+    res.send("Success delete", 200);
   } catch (err) {
     const message = err || "Bad request";
     res.send(message, 404);

@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
 
     if (typeof done === "boolean") await task.update({ done });
 
-    res.send({ task }, 200);
+    res.send("Success edit", 200);
   } catch (err) {
     if (err.errors) {
       res.status(400).json({ message: err.errors[0].message });
