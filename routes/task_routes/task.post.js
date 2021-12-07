@@ -1,6 +1,8 @@
-const Task = require("../../../../models/task.js");
+const Task = require("../../models/task.js");
+const express = require("express");
+const router = express.Router();
 
-module.exports = async (req, res) => {
+module.exports = router.post("/task", async (req, res) => {
   try {
     if (!req.body.name) throw "Name not found";
     const name = req.body.name.trim().replace(/\s+/g, " ");
@@ -15,4 +17,4 @@ module.exports = async (req, res) => {
       res.status(422).json({ message });
     }
   }
-};
+});

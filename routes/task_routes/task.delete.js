@@ -1,6 +1,8 @@
-const Task = require("../../../../models/task.js");
+const Task = require("../../models/task.js");
+const express = require("express");
+const router = express.Router();
 
-module.exports = async (req, res) => {
+module.exports = router.delete("/task/:id", async (req, res) => {
   try {
     const taskForDelete = await Task.findByPk(req.params.id);
     if (!taskForDelete) throw "Task not found";
@@ -12,4 +14,4 @@ module.exports = async (req, res) => {
     const message = err || "Bad request";
     res.send(message, 404);
   }
-};
+});

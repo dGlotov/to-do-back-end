@@ -1,6 +1,8 @@
-const Task = require("../../../../models/task.js");
+const Task = require("../../models/task.js");
+const express = require("express");
+const router = express.Router();
 
-module.exports = async (req, res) => {
+module.exports = router.get("/tasks", async (req, res) => {
   try {
     const filterBy = req.query.filterBy
       ? req.query.filterBy === "done"
@@ -40,4 +42,4 @@ module.exports = async (req, res) => {
     const message = err || "Bad request";
     res.status(400).json({ message });
   }
-};
+});

@@ -1,6 +1,8 @@
-const Task = require("../../../../models/task.js");
+const Task = require("../../models/task.js");
+const express = require("express");
+const router = express.Router();
 
-module.exports = async (req, res) => {
+module.exports = router.patch("/task/:id", async (req, res) => {
   try {
     const done = req.body.done;
 
@@ -26,4 +28,4 @@ module.exports = async (req, res) => {
       res.status(422).json({ message });
     }
   }
-};
+});
