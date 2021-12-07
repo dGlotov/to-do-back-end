@@ -7,7 +7,11 @@ module.exports = async (req, res) => {
     await taskForDelete.destroy();
     res.send("Succes delete", 200);
   } catch (err) {
-    // err.errors.length && res.status(400).json({ message: err.errors[0].message });
-    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
+    if (err.errors) {
+      res.status(400).json({ message: err.errors[0].message });
+    } else {
+      const message = err || "Bad request";
+      res.status(400).json({ message });
+    }
   }
 };

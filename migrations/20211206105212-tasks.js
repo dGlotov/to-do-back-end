@@ -12,10 +12,6 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         unique: true,
-        validate: {
-          is: /[\wа-яА-Я]/i,
-          len: [2, 100],
-        },
       },
       done: {
         type: Sequelize.BOOLEAN,

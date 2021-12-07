@@ -3,12 +3,16 @@ const Task = require("../../../../models/task.js");
 module.exports = async (req, res) => {
   try {
     if (!req.body.name) throw "Name not found";
-
-    const task = await Task.create(req.body);
+    const name = req.body.name.trim().replace(/\s+/g, " ");
+    const task = await Task.create({ name });
 
     res.send(task);
   } catch (err) {
-    // err.errors.length && res.status(400).json({ message: err.errors[0].message });
-    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
+    if (err.errors) {
+      res.status(400).json({ message: err.errors[0].message });
+    } else {
+      const message = err || "Bad request";
+      res.status(400).json({ message });
+    }
   }
 };

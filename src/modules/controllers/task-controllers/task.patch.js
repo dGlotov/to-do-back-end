@@ -2,23 +2,28 @@ const Task = require("../../../../models/task.js");
 
 module.exports = async (req, res) => {
   try {
-    const name = req.body.name;
     const done = req.body.done;
 
+    if (!req.body.name && !typeof done === "boolean") throw "Bad request body";
+
     const task = await Task.findByPk(req.params.id);
+
     if (!task) throw "Id not found";
 
-    if (name) {
+    if (req.body.name) {
+      const name = req.body.name.trim().replace(/\s+/g, " ");
       await task.update({ name });
     }
 
-    if (typeof done === "boolean") {
-      await task.update({ done });
-    } else throw "Bad request body";
+    if (typeof done === "boolean") await task.update({ done });
 
     res.send({ task }, 200);
   } catch (err) {
-    // err.errors && res.status(400).json({ message: err.errors[0].message });
-    err ? res.json({ message: err }) : res.json({ message: "Bad request" });
+    if (err.errors) {
+      res.status(400).json({ message: err.errors[0].message });
+    } else {
+      const message = err || "Bad request";
+      res.status(400).json({ message });
+    }
   }
 };

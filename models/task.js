@@ -13,6 +13,10 @@ const task = sequelize.define("task", {
   name: {
     type: Sequelize.STRING,
     allowNull: false,
+    validate: {
+      is: /[\wа-яА-Я]/,
+      len: [2, 100],
+    },
   },
   done: {
     type: Sequelize.BOOLEAN,
