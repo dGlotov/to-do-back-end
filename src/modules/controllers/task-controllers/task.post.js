@@ -6,13 +6,13 @@ module.exports = async (req, res) => {
     const name = req.body.name.trim().replace(/\s+/g, " ");
     const task = await Task.create({ name });
 
-    res.send(task);
+    res.send(task, 200);
   } catch (err) {
     if (err.errors) {
       res.status(400).json({ message: err.errors[0].message });
     } else {
       const message = err || "Bad request";
-      res.status(400).json({ message });
+      res.status(422).json({ message });
     }
   }
 };

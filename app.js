@@ -1,15 +1,17 @@
 const express = require("express");
 const cors = require("cors");
-const apiRoutes = require("./src/modules/routes/task.js");
 const dotenv = require("dotenv");
-// const Sequelize = require("sequelize");
+const fs = require("fs");
 const app = express();
 
 dotenv.config();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/", apiRoutes);
+
+fs.readdirSync("./src/modules/routes/").forEach((file) => {
+  app.use("/", require(`./src/modules/routes/${file}`));
+});
 
 const PORT = process.env.PORT;
 

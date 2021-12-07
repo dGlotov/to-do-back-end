@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
       res.status(400).json({ message: err.errors[0].message });
     } else {
       const message = err || "Bad request";
-      res.status(400).json({ message });
+      res.status(422).json({ message });
     }
   }
 };
