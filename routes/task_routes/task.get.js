@@ -3,7 +3,6 @@ const express = require("express");
 const router = express.Router();
 
 module.exports = router.get("/tasks", async (req, res) => {
-  console.log(models, "routs");
   try {
     const filterBy = req.query.filterBy
       ? req.query.filterBy === "done"
