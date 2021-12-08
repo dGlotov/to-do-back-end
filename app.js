@@ -1,18 +1,16 @@
-import express, { json, urlencoded } from 'express';
-import cors from 'cors';
-import apiRoutes from './src/modules/routes/task.js';
-import dotenv from "dotenv"
+const recursive = require("recursive-readdir-sync");
+const express = require("express");
+const cors = require("cors");
+const dotenv = require("dotenv");
+dotenv.config();
 const app = express();
 
-dotenv.config();
-
 app.use(cors());
-app.use(json());
-app.use(urlencoded({ extended: true }))
-app.use('/', apiRoutes);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT 
+recursive(`${__dirname}/routes`).forEach((file) => app.use("/", require(file)));
 
-app.listen(PORT, () => {
-  console.log(`Example!!! listening on port ${PORT}`);
+app.listen(process.env.PORT, () => {
+  console.log("Example!!!", process.env.PORT);
 });
