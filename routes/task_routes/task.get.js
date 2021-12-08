@@ -1,8 +1,9 @@
-const Task = require("../../models/task.js");
+const models = require("../../models/index").task;
 const express = require("express");
 const router = express.Router();
 
 module.exports = router.get("/tasks", async (req, res) => {
+  console.log(models, "routs");
   try {
     const filterBy = req.query.filterBy
       ? req.query.filterBy === "done"
@@ -19,7 +20,7 @@ module.exports = router.get("/tasks", async (req, res) => {
     let itemsOnPage = [];
 
     if (filterBy === "all") {
-      itemsOnPage = await Task.findAndCountAll({
+      itemsOnPage = await models.findAndCountAll({
         limit: pageSize,
         offset: page * pageSize,
         order: [["createdAt", sortBy]],
@@ -27,7 +28,7 @@ module.exports = router.get("/tasks", async (req, res) => {
     }
 
     if (filterBy !== "all") {
-      itemsOnPage = await Task.findAndCountAll({
+      itemsOnPage = await models.findAndCountAll({
         limit: pageSize,
         offset: page * pageSize,
         where: {
@@ -39,6 +40,7 @@ module.exports = router.get("/tasks", async (req, res) => {
 
     res.send({ arrTasks: itemsOnPage.rows, countTasks: itemsOnPage.count }, 200);
   } catch (err) {
+    console.log(err);
     const message = err || "Bad request";
     res.status(400).json({ message });
   }

@@ -1,10 +1,10 @@
-const Task = require("../../models/task.js");
+const models = require("../../models").task;
 const express = require("express");
 const router = express.Router();
 
 module.exports = router.delete("/task/:id", async (req, res) => {
   try {
-    const taskForDelete = await Task.findByPk(req.params.id);
+    const taskForDelete = await models.findByPk(req.params.id);
     if (!taskForDelete) throw "Task not found";
 
     await taskForDelete.destroy();

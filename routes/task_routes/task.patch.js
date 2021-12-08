@@ -1,4 +1,4 @@
-const Task = require("../../models/task.js");
+const models = require("../../models").task;
 const express = require("express");
 const router = express.Router();
 
@@ -8,7 +8,7 @@ module.exports = router.patch("/task/:id", async (req, res) => {
 
     if (!req.body.name && !typeof done === "boolean") throw "Bad request body";
 
-    const task = await Task.findByPk(req.params.id);
+    const task = await models.findByPk(req.params.id);
 
     if (!task) throw "Id not found";
 
