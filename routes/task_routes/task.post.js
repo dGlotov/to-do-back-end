@@ -5,7 +5,11 @@ const router = express.Router();
 module.exports = router.post("/task", async (req, res) => {
   try {
     if (!req.body.name) throw "Name not found";
+
     const name = req.body.name.trim().replace(/\s+/g, " ");
+
+    if (!name) throw "Name is not correct";
+
     const task = await models.create({ name });
 
     res.send(task, 200);
