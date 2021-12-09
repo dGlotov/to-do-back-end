@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const task = sequelize.define("task", {
+  const Task = sequelize.define("Task", {
     uuid: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
@@ -28,5 +28,13 @@ module.exports = (sequelize, Sequelize) => {
       field: "updated_at",
     },
   });
-  return task;
+  Task.associate = (models) => {
+    Task.belongsTo(models.User, {
+      foreignKey: {
+        type: Sequelize.UUID,
+        field: "user_id",
+      },
+    });
+  };
+  return Task;
 };

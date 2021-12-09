@@ -1,16 +1,18 @@
-const models = require("../../models").task;
+const models = require("../../models");
 const express = require("express");
 const router = express.Router();
 
-module.exports = router.post("/task", async (req, res) => {
+module.exports = router.post("/:userId/task", async (req, res) => {
   try {
     if (!req.body.name) throw "Name not found";
 
     const name = req.body.name.trim().replace(/\s+/g, " ");
+    const userId = req.params.userId;
 
     if (!name) throw "Name is not correct";
 
-    const task = await models.create({ name });
+    const user = await models.User.findByPk(userId);
+    const task = await user.createTask({ name });
 
     res.send(task, 200);
   } catch (err) {
