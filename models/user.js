@@ -1,5 +1,5 @@
 module.exports = (sequelize, Sequelize) => {
-  const user = sequelize.define("user", {
+  const User = sequelize.define("User", {
     uuid: {
       type: Sequelize.UUID,
       defaultValue: Sequelize.UUIDV4,
@@ -31,5 +31,8 @@ module.exports = (sequelize, Sequelize) => {
       field: "updated_at",
     },
   });
-  return user;
+  User.associate = (models) => {
+    User.hasMany(models.Task)
+  }
+  return User;
 };
