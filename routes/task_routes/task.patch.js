@@ -1,31 +1,38 @@
-const models = require("../../models").task;
+const models = require("../../models");
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/authorization");
 
-module.exports = router.patch("/task/:id", async (req, res) => {
+module.exports = router.patch("/task/:id", auth, async (req, res, next) => {
   try {
     const done = req.body.done;
+    const name = req.body.name?.trim().replace(/\s+/g, " ");
+    if (!req.body.name && !typeof done === "boolean") throw new Error("Bad request body");
 
-    if (!req.body.name && !typeof done === "boolean") throw "Bad request body";
+    const checkUniqName =
+      name &&
+      (await models.Task.findOne({
+        where: {
+          name,
+          user_id: res.locals.id,
+        },
+      }));
 
-    const task = await models.findByPk(req.params.id);
+    if (checkUniqName) throw new Error("Name must be unique");
 
-    if (!task) throw "Id not found";
+    const task = await models.Task.findOne({
+      where: {
+        uuid: req.params.id,
+        user_id: res.locals.id,
+      },
+    });
 
-    if (req.body.name) {
-      const name = req.body.name.trim().replace(/\s+/g, " ");
-      await task.update({ name });
-    }
+    if (!task) throw new Error("Task not found");
 
-    if (typeof done === "boolean") await task.update({ done });
+    await task.update({ name, done });
 
     res.send("Success edit", 200);
   } catch (err) {
-    if (err.errors) {
-      res.status(400).json({ message: err.errors[0].message });
-    } else {
-      const message = err || "Bad request";
-      res.status(422).json({ message });
-    }
+    next(err);
   }
 });

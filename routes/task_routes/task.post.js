@@ -1,26 +1,29 @@
 const models = require("../../models");
 const express = require("express");
 const router = express.Router();
+const auth = require("../../middleware/authorization");
 
-module.exports = router.post("/:userId/task", async (req, res) => {
+module.exports = router.post("/task", auth, async (req, res, next) => {
   try {
-    if (!req.body.name) throw "Name not found";
+    const user_id = res.locals.id;
+    const name = req.body.name?.trim().replace(/\s+/g, " ");
+    if (!name) throw new Error("Name not correct");
 
-    const name = req.body.name.trim().replace(/\s+/g, " ");
-    const userId = req.params.userId;
+    const checkUniqName = await models.Task.findOne({
+      where: {
+        name,
+        user_id,
+      },
+    });
 
-    if (!name) throw "Name is not correct";
+    if (checkUniqName) throw new Error("Name must be unique");
 
-    const user = await models.User.findByPk(userId);
+    const user = await models.User.findByPk(user_id);
+
     const task = await user.createTask({ name });
 
     res.send(task, 200);
   } catch (err) {
-    if (err.errors) {
-      res.status(400).json({ message: err.errors[0].message });
-    } else {
-      const message = err || "Bad request";
-      res.status(422).json({ message });
-    }
+    next(err);
   }
 });
