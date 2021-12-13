@@ -12,7 +12,6 @@ module.exports = (sequelize, Sequelize) => {
       validate: {
         is: /[\wа-яА-Я]/,
         len: [4, 100],
-        isEmail: true,
       },
     },
     password: {
@@ -32,7 +31,7 @@ module.exports = (sequelize, Sequelize) => {
     },
   });
   User.associate = (models) => {
-    User.hasMany(models.Task)
-  }
+    User.hasMany(models.Task);
+  };
   return User;
 };
